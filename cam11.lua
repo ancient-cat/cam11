@@ -98,6 +98,7 @@ function Camera:setAngle(angle)
 end
 
 function Camera:getTransform()
+  lazySetXf(self)
   return self.xf
 end
 
