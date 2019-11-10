@@ -1,6 +1,6 @@
-###### cam11 camera library
+# cam11 camera library
 
-##### Introduction
+## Introduction
 
 This is a simple, low-level camera library that makes use of the
 [Transform](https://love2d.org/wiki/Transform) object introduced in LÖVE
@@ -22,14 +22,14 @@ updates of the transformation. For this to work as expected, it's important
 not to access the fields directly unless you understand the consequences, and
 use the accessor methods instead.
 
-##### Definitions
+## Definitions
 
 There seems to be some confusion when defining coordinate systems. Here we will
 use *screen coordinates* to mean coordinates relative to the top left of the
 screen, the same ones that LÖVE uses by default, and *world coordinates* to
 mean coordinates relative to the world that is to be drawn.
 
-##### Usage
+## Usage
 
 `local Camera = require 'cam11'`: Returns the Camera class.
 
@@ -143,7 +143,7 @@ local function getBoundingVPRect(cam)
 end
 ```
 
-##### License
+## License
 
 This library is distributed under the following license terms:
 
