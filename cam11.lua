@@ -145,6 +145,22 @@ function Camera:getViewport()
   return vp[1], vp[2], vp[3], vp[4], vp[5], vp[6]
 end
 
+function Camera:getVPTopLeft()
+  local vp = self.vp
+  return vp[1], vp[2]
+end
+
+function Camera:getVPBottomRight()
+  local vp = self.vp
+  return vp[1] + (vp[3] or getWidth()), vp[2] + (vp[4] or getHeight())
+end
+
+function Camera:getFocusPoint()
+  local vp = self.vp
+  return vp[1] + (vp[3] or getWidth()) * vp[5],
+         vp[2] + (vp[4] or getHeight()) * vp[6]
+end
+
 function Camera:setDirty(dirty)
   self.dirty = dirty ~= false and true or false
 end
