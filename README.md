@@ -117,7 +117,7 @@ horizontal and vertical, respectively. See `Camera.new()` for details.
 fraction of the current viewport.
 
 `cam:getVPTopLeft()`: Returns the top left coordinate, in screen coordinates,
-of the current viewport. Equivalent to *x* and *y* of cam:getViewport().
+of the current viewport. Equivalent to *x* and *y* of `cam:getViewport()`.
 
 `cam:getVPBottomRight()`: Returns the bottom right coordinate, in screen
 coordinates, of the current viewport.
@@ -126,7 +126,22 @@ coordinates, of the current viewport.
 coordinates.
 
 Note that in order to obtain the current rectangle in world coordinates, you
-can use `cam:toWorld(cam:getVPTopLeft())` (for the left and top) and `cam:toWorld(cam:getVPBottomRight())` (for the right and bottom coordinates).
+can use `cam:toWorld(cam:getVPTopLeft())` (for the left and top) and
+`cam:toWorld(cam:getVPBottomRight())` (for the right and bottom coordinates).
+If you use rotation and want a rectangle aligned to your world's axes, use
+`math.min()` and `math.max()` on every *x* and *y* coordinate returned. For
+example:
+
+```
+-- Return left, top, right bottom of the bounding rectangle of the rotated
+-- viewport, in world coordinates
+local function getBoundingVPRect(cam)
+  local left, top = cam:toWorld(cam:getVPTopLeft())
+  local right, bottom = cam:toWorld(cam:getVPBottomRight())
+  return math.min(left, right), math.min(top, bottom),
+         math.max(left, right), math.max(top, bottom)
+end
+```
 
 ##### License
 
