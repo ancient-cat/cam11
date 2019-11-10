@@ -29,7 +29,38 @@ use *screen coordinates* to mean coordinates relative to the top left of the
 screen, the same ones that LÖVE uses by default, and *world coordinates* to
 mean coordinates relative to the world that is to be drawn.
 
-## Usage
+## Usage example
+
+This is an **incomplete** example which invokes some made up functions you
+could be using in your program, and that aren't defined in this snippet:
+
+```
+local cam
+
+function love.load()
+  cam = require 'cam11'()
+  cam:setZoom(2)
+end
+
+function love.update(dt)
+  player:update(dt)
+  cam:setPos(player:getPos())
+end
+
+function love.mousepressed(x, y, b)
+  local xw, yw = cam:toWorld(x, y)
+  map:mousepressed(xw, yw, b)
+end
+
+function love.draw()
+  cam:set()
+  map:draw()
+  player:draw()
+  cam:unset()
+end
+```
+
+## Reference
 
 `local Camera = require 'cam11'`: Returns the Camera class.
 
