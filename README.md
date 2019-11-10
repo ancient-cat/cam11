@@ -33,7 +33,7 @@ mean coordinates relative to the world that is to be drawn.
 
 `local Camera = require 'cam11'`: Returns the Camera class.
 
-`local cam = Camera.new([x], [y], [zoom], [angle], [viewport_x], [viewport_y], [viewport_width], [viewport_height], [focus_x], [focus_y])`:
+`local cam = Camera.new([x], [y], [zoom], [angle], [viewport_x], [viewport_y], [viewport_w], [viewport_h], [focus_x], [focus_y])`:
 Create a new camera instance object at the given position, zoom and angle,
 using the given viewport. Remember that it's a class method, therefore the dot
 syntax must be used, instead of the colon syntax.
