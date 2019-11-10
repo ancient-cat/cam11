@@ -132,8 +132,8 @@ can use `cam:toWorld(cam:getVPTopLeft())` (for the left and top) and `cam:toWorl
 
 This library is distributed under the following license terms:
 
--- Copyright © 2019 Pedro Gimeno Fortea
---
--- You can do whatever you want with this software, under the sole condition
--- that this notice and any copyright notices are preserved. It is offered
--- with no warrany, not even implied.
+Copyright © 2019 Pedro Gimeno Fortea
+
+You can do whatever you want with this software, under the sole condition
+that this notice and any copyright notices are preserved. It is offered
+with no warrany, not even implied.
