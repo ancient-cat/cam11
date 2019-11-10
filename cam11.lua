@@ -144,6 +144,10 @@ function Camera:getViewport()
   return vp[1], vp[2], vp[3], vp[4], vp[5], vp[6]
 end
 
+function Camera:setDirty(dirty)
+  self.dirty = dirty ~= false and true or false
+end
+
 function Camera.new(x, y, zoom, angle, vpx, vpy, vpw, vph, cx, cy)
   vpx, vpy = vpx or 0, vpy or 0
   vpw, vph = vpw or false, vph or false
