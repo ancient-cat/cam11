@@ -125,11 +125,11 @@ coordinates, of the current viewport.
 `cam:getFocusPoint()`: Returns the focus point of the camera, in screen
 coordinates.
 
-Note that in order to obtain the current rectangle in world coordinates, you
-can use `cam:toWorld(cam:getVPTopLeft())` (for the left and top) and
-`cam:toWorld(cam:getVPBottomRight())` (for the right and bottom coordinates).
-If you use rotation and want a rectangle aligned to your world's axes, use
-`math.min()` and `math.max()` on every *x* and *y* coordinate returned. For
+Note that in order to obtain the current viewport rectangle in world
+coordinates, you can use `cam:toWorld(cam:getVPTopLeft())` (for the left and
+top) and `cam:toWorld(cam:getVPBottomRight())` (for the right and bottom).
+If you use rotation and want a bounding rectangle aligned to your world's axes,
+use `math.min()` and `math.max()` on every *x* and *y* coordinate returned. For
 example:
 
 ```
