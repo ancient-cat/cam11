@@ -55,9 +55,8 @@ local function setupDisplayAndXf(self)
   intersectScissor(vp[1], vp[2], vp[3] or getWidth(), vp[4] or getHeight())
 end
 
-function Camera:set()
-  setupDisplayAndXf(self)
-  return replaceTransform(self.xf)
+function Camera:setDirty(dirty)
+  self.dirty = dirty ~= false and true or false
 end
 
 function Camera:apply()
@@ -65,20 +64,15 @@ function Camera:apply()
   return applyTransform(self.xf)
 end
 
+function Camera:set()
+  setupDisplayAndXf(self)
+  return replaceTransform(self.xf)
+end
+
 function Camera:unset()
   local scissor = self.scissor
   setScissor(scissor[1], scissor[2], scissor[3], scissor[4])
   return pop()
-end
-
-function Camera:toScreen(x, y)
-  lazySetXf(self)
-  return xfXfPt(self.xf, x, y)
-end
-
-function Camera:toWorld(x, y)
-  lazySetXf(self)
-  return xfInvXfPt(self.xf, x, y)
 end
 
 function Camera:setPos(x, y)
@@ -95,6 +89,34 @@ end
 function Camera:setAngle(angle)
   self.dirty = self.angle ~= angle or self.dirty
   self.angle = angle
+end
+
+function Camera:setViewport(x, y, w, h, cx, cy)
+  x, y = x or 0, y or 0
+  w, h = w or false, h or false
+  cx, cy = cx or 0.5, cy or 0.5
+  if x ~= self.vp[1] or y ~= self.vp[2] or w ~= self.vp[3] or h ~= self.vp[4]
+     or cx ~= self.vp[5] or cy ~= self.vp[6]
+  then
+    self.dirty = true
+  end
+  local vp = self.vp
+  vp[1] = x
+  vp[2] = y
+  vp[3] = w
+  vp[4] = h
+  vp[5] = cx
+  vp[6] = cy
+end
+
+function Camera:toScreen(x, y)
+  lazySetXf(self)
+  return xfXfPt(self.xf, x, y)
+end
+
+function Camera:toWorld(x, y)
+  lazySetXf(self)
+  return xfInvXfPt(self.xf, x, y)
 end
 
 function Camera:getTransform()
@@ -122,24 +144,6 @@ function Camera:getAngle()
   return self.angle
 end
 
-function Camera:setViewport(x, y, w, h, cx, cy)
-  x, y = x or 0, y or 0
-  w, h = w or false, h or false
-  cx, cy = cx or 0.5, cy or 0.5
-  if x ~= self.vp[1] or y ~= self.vp[2] or w ~= self.vp[3] or h ~= self.vp[4]
-     or cx ~= self.vp[5] or cy ~= self.vp[6]
-  then
-    self.dirty = true
-  end
-  local vp = self.vp
-  vp[1] = x
-  vp[2] = y
-  vp[3] = w
-  vp[4] = h
-  vp[5] = cx
-  vp[6] = cy
-end
-
 function Camera:getViewport()
   local vp = self.vp
   return vp[1], vp[2], vp[3], vp[4], vp[5], vp[6]
@@ -159,10 +163,6 @@ function Camera:getFocusPoint()
   local vp = self.vp
   return vp[1] + (vp[3] or getWidth()) * vp[5],
          vp[2] + (vp[4] or getHeight()) * vp[6]
-end
-
-function Camera:setDirty(dirty)
-  self.dirty = dirty ~= false and true or false
 end
 
 function Camera.new(x, y, zoom, angle, vpx, vpy, vpw, vph, cx, cy)
