@@ -3,7 +3,7 @@
 ##### Introduction
 
 This is a simple, low-level camera library that makes use of the
-[Transform](https://love2d.org/wiki/Transform) objects introduced in LÖVE
+[Transform](https://love2d.org/wiki/Transform) object introduced in LÖVE
 (love2d) version 11.0.
 
 It is intended as either a simple camera for games that don't need more, or as
