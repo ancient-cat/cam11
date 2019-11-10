@@ -159,7 +159,7 @@ function Camera:getVPBottomRight()
   return vp[1] + (vp[3] or getWidth()), vp[2] + (vp[4] or getHeight())
 end
 
-function Camera:getFocusPoint()
+function Camera:getVPFocusPoint()
   local vp = self.vp
   return vp[1] + (vp[3] or getWidth()) * vp[5],
          vp[2] + (vp[4] or getHeight()) * vp[6]

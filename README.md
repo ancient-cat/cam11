@@ -122,7 +122,7 @@ of the current viewport. Equivalent to *x* and *y* of `cam:getViewport()`.
 `cam:getVPBottomRight()`: Returns the bottom right coordinate, in screen
 coordinates, of the current viewport.
 
-`cam:getFocusPoint()`: Returns the focus point of the camera, in screen
+`cam:getVPFocusPoint()`: Returns the focus point of the camera, in screen
 coordinates.
 
 Note that in order to obtain the current viewport rectangle in world
