@@ -106,12 +106,14 @@ consequences.
 
 `cam:apply()`: Applies a further transformation with the camera parameters, on
 top of the current LÖVE transformation. Every `cam:apply()` must have one
-corresponding `cam:unset()`.
+corresponding `cam:unset()`. Always call `cam:unset()` before calling
+`cam:set()` or `cam:apply()` again.
 
 `cam:set()`: Sets the LÖVE transformation to the current camera parameters,
 keeping the current values. Roughly equivalent to doing a
 `love.graphics.origin()` followed by `cam:apply()`. Every `cam:set()` must have
-one corresponding `cam:unset()`.
+one corresponding `cam:unset()`. Always call `cam:unset()` before calling
+`cam:set()` or `cam:apply()` again.
 
 `cam:unset()`: Restores the LÖVE transformation that was active since the
 latest `cam:set()` or `cam:apply()`. You must call either of those before
