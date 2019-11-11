@@ -10,7 +10,7 @@
 local newTransform = love.math.newTransform
 local replaceTransform, applyTransform, push, pop, getWidth, getHeight
 local getScissor, intersectScissor, setScissor
-local xfSetXf, xfXfPt, xfInvXfPt
+local xfSetXf, xfGetMatrix
 do
   local lg = love.graphics
   replaceTransform = lg.replaceTransform
@@ -24,8 +24,7 @@ do
   setScissor = lg.setScissor
   local Xf = debug.getregistry().Transform
   xfSetXf = Xf.setTransformation
-  xfXfPt = Xf.transformPoint
-  xfInvXfPt = Xf.inverseTransformPoint
+  xfGetMatrix = Xf.getMatrix
 end
 
 local Camera = {}
@@ -36,10 +35,36 @@ local function lazyUpdateXf(self)
   if self.dirty then
     self.dirty = false
     local vp = self.vp
-    return xfSetXf(self.xf, 
+    self.matdirty = true
+    self.invmatdirty = true
+    return xfSetXf(self.xf,
                    vp[1] + (vp[3] or getWidth()) * vp[5],
                    vp[2] + (vp[4] or getHeight()) * vp[6],
                    self.angle, self.zoom, self.zoom, self.x, self.y)
+  end
+end
+
+local function lazyUpdateMat(self)
+  lazyUpdateXf(self)
+  if self.matdirty then
+    self.matdirty = false
+    local mat = self.mat
+    local t
+    mat[1], mat[2], t, mat[5], mat[3], mat[4], t, mat[6] = xfGetMatrix(self.xf)
+  end
+end
+
+local function lazyUpdateInvMat(self)
+  lazyUpdateMat(self)
+  if self.invmatdirty then
+    self.invmatdirty = false
+    local imat = self.invmat
+    local mat = self.mat
+    local a11, a12, a21, a22 = mat[1], mat[2], mat[3], mat[4]
+    local det = a11*a22 - a12*a21
+    imat[1], imat[2], imat[3], imat[4] = a22/det, a12/-det, a21/-det, a11/det
+    imat[5] = mat[5]
+    imat[6] = mat[6]
   end
 end
 
@@ -106,13 +131,17 @@ function Camera:setViewport(x, y, w, h, cx, cy)
 end
 
 function Camera:toScreen(x, y)
-  lazyUpdateXf(self)
-  return xfXfPt(self.xf, x, y)
+  lazyUpdateMat(self)
+  local mat = self.mat
+  return mat[1] * x + mat[2] * y + mat[5], mat[3] * x + mat[4] * y + mat[6]
 end
 
 function Camera:toWorld(x, y)
-  lazyUpdateXf(self)
-  return xfInvXfPt(self.xf, x, y)
+  lazyUpdateInvMat(self)
+  local imat = self.invmat
+  x = x - imat[5]
+  y = y - imat[6]
+  return imat[1] * x + imat[2] * y, imat[3] * x + imat[4] * y
 end
 
 function Camera:getTransform()
@@ -173,7 +202,11 @@ function Camera.new(x, y, zoom, angle, vpx, vpy, vpw, vph, cx, cy)
     vp = {vpx, vpy, vpw, vph, cx, cy};
     xf = newTransform();
     dirty = true;
+    matdirty = true;
+    invmatdirty = true;
     scissor = {false,false,false,false};
+    mat = {0, 0, 0, 0, 0, 0};
+    invmat = {0, 0, 0, 0, 0, 0};
   }
   return setmetatable(self, CameraInstanceMT)
 end
