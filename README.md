@@ -104,20 +104,14 @@ time it's needed, which can potentially lead to invalid results based on an
 obsolete transformation. Don't set it to `false` unless you understand the
 consequences.
 
-`cam:apply()`: Applies a further transformation with the camera parameters, on
-top of the current LÖVE transformation. Every `cam:apply()` must have one
-corresponding `cam:unset()`. Always call `cam:unset()` before calling
-`cam:set()` or `cam:apply()` again.
+`cam:attach()`: Replaces the LÖVE transformation with the current camera
+parameters, remembering the old transformation in order to restore it later.
+`cam:attach()` must have one corresponding `cam:detach()`. Always call
+`cam:detach()` before calling `cam:attach()` again.
 
-`cam:set()`: Sets the LÖVE transformation to the current camera parameters,
-keeping the current values. Roughly equivalent to doing a
-`love.graphics.origin()` followed by `cam:apply()`. Every `cam:set()` must have
-one corresponding `cam:unset()`. Always call `cam:unset()` before calling
-`cam:set()` or `cam:apply()` again.
-
-`cam:unset()`: Restores the LÖVE transformation that was active since the
-latest `cam:set()` or `cam:apply()`. You must call either of those before
-calling this function.
+`cam:detach()`: Restores the LÖVE transformation that was active since the
+latest `cam:attach()`. You must call `cam:attach()` before calling this
+function.
 
 `cam:setPos(x, y)`: Changes the current *x* and *y* coordinates that the camera
 must point to.

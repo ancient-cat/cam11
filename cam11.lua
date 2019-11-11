@@ -43,7 +43,11 @@ local function lazySetXf(self)
   end
 end
 
-local function setupDisplayAndXf(self)
+function Camera:setDirty(dirty)
+  self.dirty = dirty ~= false and true or false
+end
+
+function Camera:attach()
   lazySetXf(self)
   push()
   local vp, scissor = self.vp, self.scissor
@@ -53,23 +57,10 @@ local function setupDisplayAndXf(self)
   scissor[3] = w
   scissor[4] = h
   intersectScissor(vp[1], vp[2], vp[3] or getWidth(), vp[4] or getHeight())
-end
-
-function Camera:setDirty(dirty)
-  self.dirty = dirty ~= false and true or false
-end
-
-function Camera:apply()
-  setupDisplayAndXf(self)
-  return applyTransform(self.xf)
-end
-
-function Camera:set()
-  setupDisplayAndXf(self)
   return replaceTransform(self.xf)
 end
 
-function Camera:unset()
+function Camera:detach()
   local scissor = self.scissor
   setScissor(scissor[1], scissor[2], scissor[3], scissor[4])
   return pop()
