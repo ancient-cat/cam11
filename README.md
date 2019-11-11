@@ -185,6 +185,19 @@ local function getBoundingVPRect(cam)
 end
 ```
 
+## Feedback
+
+Have you found a problem? Please let me know so I can fix it! It helps me a lot
+if you report any issues you find. You're getting this library for free, after
+all, so why not pay me back this way? That's what keeps the free software world
+rolling: mutual help.
+
+https://notabug.org/pgimeno/cam11/issues
+
+Have any feedback? You can post in the love2d forums:
+
+https://love2d.org/forums/viewtopic.php?f=5&t=8766
+
 ## License
 
 This library is distributed under the following license terms:
