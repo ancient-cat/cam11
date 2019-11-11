@@ -158,20 +158,29 @@ coordinates, of the current viewport.
 coordinates.
 
 Note that in order to obtain the current viewport rectangle in world
-coordinates, you can use `cam:toWorld(cam:getVPTopLeft())` (for the left and
-top) and `cam:toWorld(cam:getVPBottomRight())` (for the right and bottom).
-If you use rotation and want a bounding rectangle aligned to your world's axes,
-use `math.min()` and `math.max()` on every *x* and *y* coordinate returned. For
-example:
+coordinates, or the axis-aligned bounding rectangle that encloses it, you can
+use the functions below, as follows:
 
 ```
 -- Return left, top, right bottom of the bounding rectangle of the rotated
 -- viewport, in world coordinates
+local min = math.min
+local max = math.max
+
+local function getVPRect(cam)
+  local left, top = cam:getVPTopLeft()
+  local right, bottom = cam:getVPBottomRight()
+  local x1, y1 = cam:toWorld(left, top)
+  local x2, y2 = cam:toWorld(right, top)
+  local x3, y3 = cam:toWorld(right, bottom)
+  local x4, y4 = cam:toWorld(left, bottom)
+  return x1, y1, x2, y2, x3, y3, x4, y4
+end
+
 local function getBoundingVPRect(cam)
-  local left, top = cam:toWorld(cam:getVPTopLeft())
-  local right, bottom = cam:toWorld(cam:getVPBottomRight())
-  return math.min(left, right), math.min(top, bottom),
-         math.max(left, right), math.max(top, bottom)
+  local x1, y1, x2, y2, x3, y3, x4, y4 = getVPRect(cam)
+  return min(min(x1, x2), min(x3, x4)), min(min(y1, y2), min(y3, y4)),
+         max(max(x1, x2), max(x3, x4)), max(max(y1, y2), max(y3, y4))
 end
 ```
 
