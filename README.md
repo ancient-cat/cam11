@@ -79,7 +79,7 @@ the drawing 3X. The default is 1.
 Following LÖVE's axis conventions, positive values mean clockwise rotation. The
 default is 0.
 
-`viewport_x` and `viewport_y` are the coordinates of the top left angle of the
+`viewport_x` and `viewport_y` are the coordinates of the top left corner of the
 viewport where the camera will be rendered, in screen coordinates. The default
 is 0 for both.
 
