@@ -32,7 +32,7 @@ local Camera = {}
 local CameraClassMT = {__call = function (c, ...) return c.new(...) end}
 local CameraInstanceMT = {__index = Camera}
 
-local function lazySetXf(self)
+local function lazyUpdateXf(self)
   if self.dirty then
     self.dirty = false
     local vp = self.vp
@@ -48,7 +48,7 @@ function Camera:setDirty(dirty)
 end
 
 function Camera:attach(clip)
-  lazySetXf(self)
+  lazyUpdateXf(self)
   push()
   if clip ~= false then
     local vp, scissor = self.vp, self.scissor
@@ -106,17 +106,17 @@ function Camera:setViewport(x, y, w, h, cx, cy)
 end
 
 function Camera:toScreen(x, y)
-  lazySetXf(self)
+  lazyUpdateXf(self)
   return xfXfPt(self.xf, x, y)
 end
 
 function Camera:toWorld(x, y)
-  lazySetXf(self)
+  lazyUpdateXf(self)
   return xfInvXfPt(self.xf, x, y)
 end
 
 function Camera:getTransform()
-  lazySetXf(self)
+  lazyUpdateXf(self)
   return self.xf
 end
 
