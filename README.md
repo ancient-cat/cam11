@@ -112,12 +112,12 @@ parameters, remembering the old transformation in order to restore it later.
 The optional `clip` parameter specifies whether to use the LÖVE scissor to clip
 to the viewport. A value of `false` indicates not to clip; otherwise it clips.
 The default is to clip. The clipping intersects the current scissor, rather
-than replace it, to be GUI-friendly. The scissor is restored when calling
-`cam:detach()`, regardless of whether clipping was requested.
+than replace it, to be GUI-friendly. If clipping was requested, the scissor
+will be restored when calling `cam:detach()`.
 
 `cam:detach()`: Restores the LÖVE transformation that was active since the
-latest `cam:attach()`. You must call `cam:attach()` before calling this
-function.
+latest `cam:attach()`, and if clipping was requested, also restores the scissor
+that was active. You must call `cam:attach()` before calling this function.
 
 `cam:setPos(x, y)`: Changes the current *x* and *y* coordinates that the camera
 must point to.

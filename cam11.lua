@@ -50,13 +50,13 @@ end
 function Camera:attach(clip)
   lazySetXf(self)
   push()
-  local vp, scissor = self.vp, self.scissor
-  local x, y, w, h = getScissor()
-  scissor[1] = x
-  scissor[2] = y
-  scissor[3] = w
-  scissor[4] = h
   if clip ~= false then
+    local vp, scissor = self.vp, self.scissor
+    local x, y, w, h = getScissor()
+    scissor[1] = x
+    scissor[2] = y
+    scissor[3] = w
+    scissor[4] = h
     intersectScissor(vp[1], vp[2], vp[3] or getWidth(), vp[4] or getHeight())
   end
   return replaceTransform(self.xf)
@@ -64,7 +64,10 @@ end
 
 function Camera:detach()
   local scissor = self.scissor
-  setScissor(scissor[1], scissor[2], scissor[3], scissor[4])
+  if scissor[1] ~= false then
+    setScissor(scissor[1], scissor[2], scissor[3], scissor[4])
+    scissor[1] = false
+  end
   return pop()
 end
 
@@ -170,7 +173,7 @@ function Camera.new(x, y, zoom, angle, vpx, vpy, vpw, vph, cx, cy)
     vp = {vpx, vpy, vpw, vph, cx, cy};
     xf = newTransform();
     dirty = true;
-    scissor = {0,0,0,0};
+    scissor = {false,false,false,false};
   }
   return setmetatable(self, CameraInstanceMT)
 end
