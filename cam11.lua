@@ -47,7 +47,7 @@ function Camera:setDirty(dirty)
   self.dirty = dirty ~= false and true or false
 end
 
-function Camera:attach()
+function Camera:attach(clip)
   lazySetXf(self)
   push()
   local vp, scissor = self.vp, self.scissor
@@ -56,7 +56,9 @@ function Camera:attach()
   scissor[2] = y
   scissor[3] = w
   scissor[4] = h
-  intersectScissor(vp[1], vp[2], vp[3] or getWidth(), vp[4] or getHeight())
+  if clip ~= false then
+    intersectScissor(vp[1], vp[2], vp[3] or getWidth(), vp[4] or getHeight())
+  end
   return replaceTransform(self.xf)
 end
 

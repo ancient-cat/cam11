@@ -104,10 +104,15 @@ time it's needed, which can potentially lead to invalid results based on an
 obsolete transformation. Don't set it to `false` unless you understand the
 consequences.
 
-`cam:attach()`: Replaces the LÖVE transformation with the current camera
+`cam:attach([clip])`: Replaces the LÖVE transformation with the current camera
 parameters, remembering the old transformation in order to restore it later.
 `cam:attach()` must have one corresponding `cam:detach()`. Always call
 `cam:detach()` before calling `cam:attach()` again.
+
+The optional `clip` parameter specifies whether to use the LÖVE scissor to clip
+to the viewport. A value of `false` indicates not to clip; otherwise it clips.
+The clipping intersects the current scissor, rather to replace it, to be
+GUI-friendly. The scissor is restored when calling `cam:detach()`.
 
 `cam:detach()`: Restores the LÖVE transformation that was active since the
 latest `cam:attach()`. You must call `cam:attach()` before calling this
