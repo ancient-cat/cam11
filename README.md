@@ -26,7 +26,7 @@ use the accessor methods instead.
 
 Here we use the term "screen" to refer to the drawing area, i.e. the drawable
 area within the window, which in fullscreen mode, matches the whole physical
-screen.
+screen, but in general it does not necessarily do so.
 
 This camera library is made to draw in a viewport. The viewport is any
 rectangular area of the screen, or it can cover the whole screen, which is the
