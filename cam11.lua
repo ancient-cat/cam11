@@ -75,9 +75,10 @@ end
 function Camera:attach(clip)
   lazyUpdateXf(self)
   push()
-  if clip ~= false then
-    local vp, scissor = self.vp, self.scissor
+  local vp = self.vp
+  if clip or clip == nil and (vp[3] or vp[4]) then
     local x, y, w, h = getScissor()
+    local scissor = self.scissor
     scissor[1] = x
     scissor[2] = y
     scissor[3] = w

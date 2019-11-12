@@ -30,9 +30,10 @@ screen.
 
 This camera library is made to draw in a viewport. The viewport is any
 rectangular area of the screen, or it can cover the whole screen, which is the
-default. You can choose whether to apply clipping to the viewport (using the
-Löve scissor) when attaching the camera. This viewport is always defined in
-screen coordinates.
+default. This viewport is always defined in screen coordinates. You can choose
+whether to apply clipping to the viewport (using the Löve scissor) when
+attaching the camera; by default, it only clips when the viewport is not set to
+cover the whole screen.
 
 There seems to be some confusion when defining coordinate systems.
 
