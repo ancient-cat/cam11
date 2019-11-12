@@ -3,7 +3,7 @@
 ## Introduction
 
 This is a simple, low-level camera library that makes use of the
-[Transform](https://love2d.org/wiki/Transform) object introduced in LÖVE
+[Transform](https://love2d.org/wiki/Transform) object introduced in Löve
 (love2d) version 11.0.
 
 It is intended as either a simple camera for games that don't need more, or as
@@ -24,10 +24,47 @@ use the accessor methods instead.
 
 ## Definitions
 
-There seems to be some confusion when defining coordinate systems. Here we will
-use *screen coordinates* to mean coordinates relative to the top left of the
-screen, the same ones that LÖVE uses by default, and *world coordinates* to
-mean coordinates relative to the world that is to be drawn.
+This camera library is made to draw in a viewport. The viewport is any
+rectangular area of the screen, or it can cover the whole screen, which is the
+default. You can choose whether to apply clipping to the viewport (using the
+Löve scissor) when attaching the camera. This viewport is always defined in
+screen coordinates.
+
+There seems to be some confusion when defining coordinate systems.
+
+When working with a map, we're using coordinates relative to an origin in the
+map. For example, a 4096x4096 map can use an origin located at the top left
+corner of the map, and then a point like (2000, 1000) will be 2000 units
+(pixels, usually) to the east, and 1000 units to the south of that point. This
+point (2000, 1000) is said to be in *world coordinates*. The term "world" is
+used instead of "map" because it is more general: what you're drawing might not
+be a map, but it's usually a world of some kind. The `love.physics` module, for
+example, uses the same term. If you're drawing a map, the terms "world
+coordinates" and "map coordinates" are equivalent.
+
+When drawing e.g. a map to the screen using the camera, one point of the map
+located, say, at coordinate (2000, 1000), does not necessarily end up in the
+screen at the same coordinate. For example, if the camera is centred on that
+point in an 800x600 screen using a full screen viewport, the final positon on
+the screen of that point will be (400, 300). This (400, 300) is relative to the
+origin of the screen, which is the top left corner. The points that use the
+top left corner of the screen as origin, and use the display units, are said to
+be expressed in *screen coordinates*. Löve uses this coordinate system, for
+example, for reporting the mouse and touch position, for the scissor functions,
+and for drawing immediately at the start of `love.draw()` or after using
+`love.graphics.origin()`. This camera library uses these coordinates for
+defining the viewport.
+
+Some libraries use the term "camera coordinates". We find that term confusing,
+because the camera deals with both types of coordinates, therefore we avoid it
+and use only screen coordinates, for the coordinates of points of the screen,
+and world coordinates, for the coordinates of the world before it is drawn
+through the camera.
+
+The library includes functions for converting coordinates from screen to world
+and vice versa. A typical use is to determine the position in the world of the
+mouse, because the mouse position is reported in screen coordinates, and it's
+often necessary to determine where in the world the click happened.
 
 ## Usage example
 
@@ -91,11 +128,14 @@ changes, by calling `cam:setDirty()` (described below), such that when it's
 needed, it's regenerated with the new width and height. This invalidation can
 be done in the `love.resize` and `love.displayrotated` (for 11.3+) events.
 
-The `focus_x` and `focus_y` parameters are the fraction of the viewport's width and height, respectively, that the camera should point to. Both default to 0.5, meaning the centre of the viewport.
+The `focus_x` and `focus_y` parameters are the fraction of the viewport's width
+and height, respectively, that the camera should point to. Both default to 0.5,
+meaning the centre of the viewport.
 
 `local cam = Camera(...)`: Alternative C++-like syntax for `Camera.new(...)`.
 
-The following are methods of the instance, described using `cam` as the name of the instance:
+The following are methods of the instance, described using `cam` as the name of
+the instance:
 
 `cam:setDirty([dirty])`: A value of `true` (default) invalidates the
 transformation, meaning it will be regenerated the next time it's needed.
@@ -130,13 +170,16 @@ must point to.
 viewport's left and top coordinates, width, height, fraction of focus point
 horizontal and vertical, respectively. See `Camera.new()` for details.
 
-`cam:toScreen(x, y)`: Transforms world coordinates to screen coordinates, returning the result.
+`cam:toScreen(x, y)`: Transforms world coordinates to screen coordinates,
+returning the result.
 
-`cam:toWorld(x, y)`: Transforms screen coordinates to world coordinates, returning the result.
+`cam:toWorld(x, y)`: Transforms screen coordinates to world coordinates,
+returning the result.
 
 `cam:getTransform()`: Returns the current internal `Transform` object.
 
-`cam:getPos()`: Returns the current *x* and *y* coordinates the camera is set to point at, in world coordinates.
+`cam:getPos()`: Returns the current *x* and *y* coordinates the camera is set
+to point at, in world coordinates.
 
 `cam:getX()`: Like above, but it returns only the *x* coordinate.
 
