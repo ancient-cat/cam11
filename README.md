@@ -95,10 +95,10 @@ function love.mousepressed(x, y, b)
 end
 
 function love.draw()
-  cam:set()
+  cam:attach()
   map:draw()
   player:draw()
-  cam:unset()
+  cam:detach()
 end
 ```
 
